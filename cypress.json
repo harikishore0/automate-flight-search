@@ -1,0 +1,7 @@
+{
+	"defaultCommandTimeout": 12000,
+	"env": {
+		"url": "https://www.orbitz.com/"
+	},
+	"failOnStatusCode": false
+}

@@ -1,0 +1,23 @@
+{
+  "name": "automate-flight-search",
+  "version": "1.0.0",
+  "description": "automating flight search using cypress java script api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harikishore0/automate-flight-search.git"
+  },
+  "keywords": [],
+  "author": "Hari Kishore Gurram",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harikishore0/automate-flight-search/issues"
+  },
+  "homepage": "https://github.com/harikishore0/automate-flight-search#readme",
+  "devDependencies": {
+    "cypress": "^8.0.0"
+  }
+}
