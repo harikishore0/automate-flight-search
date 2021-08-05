@@ -13,8 +13,6 @@ describe('test the flight search in orbitz.com', function() {
 	})
 
 	it('tests the flight search', function() {
-		// cy.visit(Cypress.env('url'))
-		// cy.visit('www.amazon.com')
 		const homePage = new OrbitzHomePage;
 		const flightResultPage = new OrbitzFlightSearchResultPage;
 
@@ -44,13 +42,10 @@ describe('test the flight search in orbitz.com', function() {
 		now.setDate(now.getDate() + 14);
 		var departDate = now.toDateString().substring(4,10);
 		var now2 = new Date();
-		now2.setDate(now2.getDate() + 28);
+		now2.setDate(now2.getDate() + 21);
 		var returnDate = now2.toDateString().substring(4,10);
 		console.log(departDate+' : '+returnDate);
 
-		// cy.get('#d1-btn').then(($departingDate) => {
-		// 	departDate = $departingDate.text();
-		// })
 		cy.get('#d1-btn').click();
 		cy.get(`.uitk-date-picker-day-number button[aria-label^="${departDate}"]`).click();
 		cy.get(`.uitk-date-picker-day-number button[aria-label^="${returnDate}"]`).click();
@@ -74,33 +69,58 @@ describe('test the flight search in orbitz.com', function() {
 			cy.assertValue($ele,returnDate)
 		})
 
-		//select non-stop flights
+		//select non-stop departure flights
 		flightResultPage.getNonStopFlights().click()
 
-
-	})
-	it("test", () => {
-		// console.log(getDate())
-		const homePage = new OrbitzHomePage;
-		const flightResultPage = new OrbitzFlightSearchResultPage;
-		cy.visit('https://www.orbitz.com/Flights-Search?leg1=from%3ASan%20Francisco%2C%20CA%20%28SFO-San%20Francisco%20Intl.%29%2Cto%3ANew%20York%2C%20NY%20%28JFK-John%20F.%20Kennedy%20Intl.%29%2Cdeparture%3A8%2F15%2F2021TANYT&leg2=from%3ANew%20York%2C%20NY%20%28JFK-John%20F.%20Kennedy%20Intl.%29%2Cto%3ASan%20Francisco%2C%20CA%20%28SFO-San%20Francisco%20Intl.%29%2Cdeparture%3A8%2F29%2F2021TANYT&mode=search&options=carrier%3A%2A%2Ccabinclass%3A%2Cmaxhops%3A1%2Cnopenalty%3AN&passengers=adults%3A1%2Cchildren%3A0%2Cinfantinlap%3AN&sortOrder=INCREASING&sortType=PRICE&trip=roundtrip', {
-			headers: {
-				'user-agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-			}});
-		flightResultPage.getFlyingFrom().then(($ele) => {
-			cy.assertValue($ele,"San Francisco, CA (SFO-San Francisco Intl.)")
-		})
-		flightResultPage.getNonStopFlights().click()
+		//Making Highest Price selection using sortby dropdown for departure flight
 		flightResultPage.getSortByDropdown().select('Price (Highest)')
+
+		//selecting the highest priced flight
 		flightResultPage.getHighestPricedFlight().click()
+
 		var flightPrice
 		flightResultPage.getFlightPrice().then(($ele) => {
 			flightPrice = $ele.text()
 			cy.log(flightPrice)
-			console.log(flightPrice)
 		})
-		cy.log(flightPrice)
-		console.log(flightPrice)
-		// flightResultPage.getSelectFlight().click()
+
+		//confirming the departure flight
+		flightResultPage.getSelectFlightButton().click()
+		flightResultPage.getReturnFlightPageLocator().should('be.visible')
+
+		//select non-stop return flights
+		flightResultPage.getNonStopFlights().click()
+
+		//Making Highest Price selection using sortby dropdown for return flights
+		flightResultPage.getSortByDropdown().select('Price (Highest)', { force: true })
+
+		//selecting the highest priced flight
+		flightResultPage.getHighestPricedFlight().click()
+
+		//confirming the return flight
+		flightResultPage.getSelectFlightButton().click()
+
+		var finalPrice
+		flightResultPage.getFinalPrice().then(($price) => {
+			finalPrice = $price.text()
+		})
+
+		//selecting 'No Thanks' in the pop generated after the above selection
+		cy.get('a[data-test-id="forcedChoiceNoThanks"]').invoke('removeAttr', 'target').click()
+
+		//asserting flight details in the flight summary page
+		cy.get('[data-test-id="flight-review-0"] .uitk-heading-4').then(($ele) => {
+			cy.assertValue($ele,"San Francisco to New York")
+		})
+
+		cy.get('[data-test-id="flight-review-1"] .uitk-heading-4').then(($ele) => {
+			cy.assertValue($ele,this.data.returnFlight)
+		})
+
+		cy.get('table[data-test-id="trip-total"] .uitk-text').then(($price) => {
+			var confirmationPagePrice = $price.text()
+			cy.log(confirmationPagePrice)
+			expect(finalPrice).to.equal(confirmationPagePrice)
+		})
 	})
 })

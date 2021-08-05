@@ -32,8 +32,24 @@ class OrbitzFlightSearchResultPage {
 		return cy.get('.uitk-sheet-footer div.uitk-price-lockup span.uitk-lockup-price[aria-hidden="true"]')
 	}
 
-	getSelectFlight() {
+	getSelectFlightButton() {
 		return cy.get('[data-test-id="select-button"]')
+	}
+
+	getSelectReturnFlight() {
+		return cy.get('button[data-test-id="select-link"]')
+	}
+
+	getReturnFlightPageLocator() {
+		return cy.get('[aria-label="Step 2 of 3. Choose returning flight. Current page"]').should('be.visible');
+	}
+
+	getFinalPrice() {
+		return cy.get('div[data-test-id="details-and-fares-footer"] span.uitk-lockup-price');
+	}
+
+	getFlightRoute() {
+		return cy.get('.uitk-heading-4')
 	}
 }
 

@@ -28,3 +28,5 @@ Cypress.Commands.add("assertValue", (locator,expectedValue) => {
 	const actualValue = locator.text()
 	expect(actualValue).to.equal(expectedValue)
 })
+
+// Cypress.Commands.add("flightSelection")

@@ -4,7 +4,7 @@
   "description": "automating flight search using cypress java script api",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx cypress open"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,8 @@
   "homepage": "https://github.com/harikishore0/automate-flight-search#readme",
   "devDependencies": {
     "cypress": "^8.0.0"
+  },
+  "dependencies": {
+    "mocha": "^9.0.3"
   }
 }

@@ -1,5 +1,5 @@
 {
-	"defaultCommandTimeout": 12000,
+	"defaultCommandTimeout": 15000,
 	"env": {
 		"url": "https://www.orbitz.com/"
 	},
